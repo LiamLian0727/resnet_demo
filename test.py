@@ -34,7 +34,7 @@ def set_logging():
 
 def custom_parse():
     parser = argparse.ArgumentParser(description='RepVGG')
-    parser.add_argument('-m', '--module_config', type=str, required=True, help='Module Config')
+    parser.add_argument('-m', '--module_name', type=str, required=True, help='Module Config')
     parser.add_argument('-t', '--train_config',
                         default="config.TrainConfig", type=str, required=False, help='Train Config')
     parser.add_argument('-p', '--pth_file', type=str, required=True, help='Module Weight Pth file')

@@ -61,8 +61,8 @@ def custom_parse():
     return args
 
 
-def build_optimizer(lr=0.1, momentum=0.9, weight_decay=1e-4):
-    return optim.SGD(lr=lr, momentum=momentum, nesterov=True, weight_decay=weight_decay)
+def build_optimizer(model, lr=0.1, momentum=0.9, weight_decay=1e-4):
+    return optim.SGD(model.parameters(), lr=lr, momentum=momentum, nesterov=True, weight_decay=weight_decay)
 
 
 def build_scheduler(optimizer, n_iter_per_epoch, num_epoch=120, warmup_epoch=5):
@@ -174,7 +174,7 @@ def train(model, logger, train_iter, test_iter, optimizer, lr_scheduler, criteri
             if acc1 >= best_acc1:
                 torch.save(
                     {'model': model.state_dict()},
-                    os.path.join(args.out_dir, f"{args.module_config.split('.')[-1]}_{time_str}_epoch{epoch + 1}.pth")
+                    os.path.join(args.out_dir, f"{module_name}_{time_str}_epoch{epoch + 1}.pth")
                 )
                 best_acc1 = max(best_acc1, acc1)
     total_time = time.time() - start_time
@@ -210,11 +210,11 @@ if __name__ == '__main__':
         model = resnet_18(input_channels=3, num_class=num_classes)
 
     flops, params = profile(model, inputs=(torch.randn(1, 3, 32, 32),))
-    logger.info(f"params: {params / 1e6:.2f}M, FLOPs: {flops / 1e9:.2f}B (in Tensor(1, 3, 224, 224))")
+    logger.info(f"params: {params / 1e6:.2f}M, FLOPs: {flops / 1e9:.2f}B (in Tensor(1, 3, 32, 32))")
     model = nn.DataParallel(model, device_ids=devices).to(devices[0])
     logger.info(f"module structure : \n{model}")
     optimizer = build_optimizer(
-        lr=train_config['lr'], momentum=train_config['momentum'], weight_decay=train_config["weight_decay"]
+        model, lr=train_config['lr'], momentum=train_config['momentum'], weight_decay=train_config["weight_decay"]
     )
     lr_scheduler = build_scheduler(optimizer, len(data_loader_train), train_config["epoch"], train_config["warmup"])
     criterion = SoftTargetCrossEntropy()
