@@ -193,7 +193,7 @@ if __name__ == '__main__':
     logger.info(f"device in: {devices}")
     train_config = importlib.import_module(args.train_config).train_config
     logger.info(f"train config: \n{train_config}")
-    module_name = importlib.import_module(args.module_config).module_name
+    module_name = args.module_name
     logger.info(f"module name: \n{module_name}")
 
     logger.info(f"Lording Dataset: {train_config['DATASET']}")
