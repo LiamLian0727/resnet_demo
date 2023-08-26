@@ -207,7 +207,7 @@ if __name__ == '__main__':
     if module_name == "resnet_18":
         from resnet import resnet_18
 
-        model = resnet_18(input_channels=3, num_classes=num_classes)
+        model = resnet_18(input_channels=3, num_class=num_classes)
 
     flops, params = profile(model, inputs=(torch.randn(1, 3, 32, 32),))
     logger.info(f"params: {params / 1e6:.2f}M, FLOPs: {flops / 1e9:.2f}B (in Tensor(1, 3, 224, 224))")
