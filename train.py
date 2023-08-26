@@ -214,7 +214,6 @@ if __name__ == '__main__':
     model = nn.DataParallel(model, device_ids=devices).to(devices[0])
     logger.info(f"module structure : \n{model}")
     optimizer = build_optimizer(
-        model, logger,
         lr=train_config['lr'], momentum=train_config['momentum'], weight_decay=train_config["weight_decay"]
     )
     lr_scheduler = build_scheduler(optimizer, len(data_loader_train), train_config["epoch"], train_config["warmup"])
