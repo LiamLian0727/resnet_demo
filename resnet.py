@@ -1,5 +1,3 @@
-from d2l.torch import *
-
 import torch
 import torchvision
 import pandas as pd
